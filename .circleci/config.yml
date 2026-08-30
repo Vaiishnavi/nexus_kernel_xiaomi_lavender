@@ -1,0 +1,25 @@
+version: 2.1
+jobs:
+  compile:
+   docker:
+      - image: nexgang/ubuntu:latest
+   steps:
+      - run:
+          command: |
+           git config --global color.ui false
+           git clone --depth=1 https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME} -b ${CIRCLE_BRANCH} .
+           bash .circleci/build.sh
+
+      - store_artifacts:
+          path: zone/lavender.zip
+          destination: lavender.zip
+
+      - store_artifacts:
+           path: log.txt
+           destination: log.txt
+
+workflows:
+  version: 2.1
+  cooking:
+    jobs:
+      - compile
